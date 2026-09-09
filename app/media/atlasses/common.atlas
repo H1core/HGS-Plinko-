@@ -1,0 +1,28 @@
+images {
+  image: "/app/media/sprites/game/S_GreenBTN_Idle_R42.png"
+}
+images {
+  image: "/app/media/sprites/game/S_GreenBTN_Push_R42.png"
+}
+images {
+  image: "/app/media/sprites/game/S_PlinkoBall.png"
+}
+images {
+  image: "/app/media/sprites/game/S_PlinkoHitVisual.png"
+}
+images {
+  image: "/app/media/sprites/game/S_PlinkoObstacle.png"
+}
+images {
+  image: "/app/media/sprites/common/pixel.png"
+}
+images {
+  image: "/app/media/sprites/common/empty.png"
+}
+images {
+  image: "/app/media/sprites/common/R48.png"
+}
+images {
+  image: "/app/media/sprites/game/S_Busket.png"
+}
+extrude_borders: 2
