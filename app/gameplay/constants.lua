@@ -1,0 +1,3 @@
+_G.GAMECONSTANT = {
+    GRAVITY = 900
+}
