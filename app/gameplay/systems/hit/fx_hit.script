@@ -1,0 +1,12 @@
+function init(self)
+    local go_url = msg.url('.')
+    go.set(go_url, "scale", vmath.vector3(0))
+    local sprite_url = msg.url(nil, go.get_id(), "sprite")
+    go.animate(go_url, "scale", go.PLAYBACK_ONCE_FORWARD, vmath.vector3(1   ), go.EASING_OUTBACK, 0.35)
+    go.animate(sprite_url, "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_INOUTSINE, 0.35)
+
+    timer.delay(0.4, false, function ()
+        go.delete(go.get_id())
+    end)
+
+end
