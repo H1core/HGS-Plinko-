@@ -1,0 +1,62 @@
+local function step_install_globals()
+    require("libs.math")
+    require("libs.littleclass")
+    require("libs.table_extensions")
+    require("app.gameplay.constants")
+end
+
+local function step_load_config()
+    local data = sys.load_resource("/app/resources/config.json")
+    local buskets_cfg = sys.load_resource("/app/resources/config_buskets.json")
+    if not data then
+        return nil
+    end
+
+    local decoded = json.decode(data)
+    _G.config = decoded 
+    _G.config.game = {weights = {}, scores = {}}
+
+    _G.config.buskets = json.decode(buskets_cfg) --[[@as {weights: integer[], values: integer[], colors: string[]}]]
+
+    for i , v in ipairs(config.baskets) do
+        _G.config.game.weights[i] = v.weight
+    end
+end
+
+
+local function step_init_services()
+    local n = #config.baskets
+    local service_game_path = require("app.gameplay.systems.service_game_path")
+    service_game_path.build_graph(n)
+    local service_game_grid = require("app.gameplay.systems.service_game_grid")
+    service_game_grid.build(n)
+    local service_sounds = require("app.scripts.service_sounds")
+    service_sounds.init()
+end
+
+local monarch = require("monarch.monarch")
+local function step_navigate()
+    --initialize monarch
+    task.delay(0)
+    monarch.show("gameplay")
+end
+
+
+
+---@type function[]
+local steps = {
+    step_install_globals,
+    step_load_config,
+    step_init_services,
+    step_navigate
+}
+
+function init(self)
+    require("libs.async")
+    task.thread(function ()
+        for i, func_bootstrap_step in ipairs(steps) do
+            print("[Bootstrap] Executing step #"..i)
+            func_bootstrap_step()
+        end
+    end)
+end

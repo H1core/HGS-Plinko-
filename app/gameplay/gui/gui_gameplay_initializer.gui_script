@@ -1,0 +1,40 @@
+local gamecontext = require("app.gameplay.gamecontext")
+---@class gameplay.gui_script
+
+---@package
+---@param self gameplay.gui_script
+function init(self)
+    gamecontext.gui_sc = event_context_manager.get()
+    msg.post("/core#gameplay_controller", "ready")
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param dt number
+function update(self, dt)
+    
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param message_id hash
+---@param message table
+---@param sender url
+function on_message(self, message_id, message, sender)
+    
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param action_id hash
+---@param action on_input.action
+---@return boolean|nil
+function on_input(self, action_id, action)
+    
+end
+
+---@package
+---@param self gameplay.gui_script
+function final(self)
+    
+end
