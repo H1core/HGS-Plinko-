@@ -81,6 +81,7 @@ end
 ---@param self gameplay_controller.script
 function final(self)
     gamepipeline.call("final")
+    self.instance_gamepipeline:clear()
 end
 
 ---@param pipeline GamePipeline

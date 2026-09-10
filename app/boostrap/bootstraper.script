@@ -24,21 +24,15 @@ local service_consumables = require("app.scripts.consumables.service_consumables
 local function step_init_services()
     local n = #config.buckets.weights
     service_consumables.init()
-    local service_game_path = require("app.gameplay.systems.service_game_path")
-    service_game_path.build_graph(n)
-    local service_game_grid = require("app.gameplay.systems.service_game_grid")
-    service_game_grid.build(n)
     local service_sounds = require("app.scripts.service_sounds")
     service_sounds.init()
-    local provider_bucket_color = require("app.gameplay.systems.buckets.provider_bucket_color")
-    provider_bucket_color.build(n, config.buckets.gradient)
 end
 
-local monarch = require("monarch.monarch")
 local function step_navigate()
     --initialize monarch
     task.delay(0)
-    monarch.show("gameplay")
+    local command_run_gameplay = require("app.gameplay.features.command_run_gameplay")
+    command_run_gameplay.execute()
 end
 
 
