@@ -15,26 +15,19 @@ local function remove_ball(balls, ball)
 end
 
 function System:awake()
-    gamecontext.ball_reach_busket_events = {}
-    self.events = gamecontext.ball_reach_busket_events
     self.balls = gamecontext.balls
     self.buckets = gamecontext.buckets
 end
 
-function System:update()
-    for event_index = #self.events, 1, -1 do
-        local event = self.events[event_index]
-        self.events[event_index] = nil
+function System:on_bucket_reach(event)
+    local bucket = self.buckets[event.basket_index + 1]
 
-        local bucket = self.buckets[event.basket_index + 1]
+    if bucket then
+        bucket:animate_catch()
+    end
 
-        if bucket then
-            bucket:animate_catch()
-        end
-
-        if remove_ball(self.balls, event.ball) then
-            go.delete(event.ball.go_url)
-        end
+    if remove_ball(self.balls, event.ball) then
+        go.delete(event.ball.go_url)
     end
 end
 

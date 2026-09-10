@@ -7,7 +7,7 @@ local M = {}
 function M.get()
     if(not __executor) then
         __executor = pipeline.new({
-            methods  = { "awake", "awake_gui", "update","update_gui", "on_dirty","on_dirty_gui", "on_input", "final" },
+            methods  = { "awake", "awake_gui", "update","debug","update_gui", "on_bucket_reach", "on_input", "final" },
             lockable = {"update", "on_dirty"}
         })
         __executor:lock()

@@ -6,8 +6,9 @@ local __t = {}
 ---@field clear function
 ---@field frame userdata
 ---@field balls GoBall[]
+---@field debugging bool
 ---@field spawn_position vector3
----@field ball_reach_busket_events { ball: GoBall, basket_index: integer }[]
+---@field stats {score: integer, buckets_reaches: integer[], total_reaches: integer}
 ---@field requested_shoots integer
 ---@field set_context_table fun(t: table)
 local M = setmetatable({}, {

@@ -40,6 +40,10 @@ function update(self, dt)
         gamepipeline.call_gui("on_dirty_gui", dt)
         gamecontext.dirty = false
     end
+
+    if(gamecontext.debugging) then
+        gamepipeline.call("debug")
+    end
 end
 
 
@@ -90,4 +94,6 @@ function build_gameplay_systems(pipeline)
     pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
     pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
     pipeline:add(require("app.gameplay.systems.system_ball_reach_busket"))
+
+    pipeline:add(require("app.gameplay.systems.system_debug"))
 end

@@ -1,6 +1,6 @@
 local gamecontext = require("app.gameplay.gamecontext")
 local service_game_grid = require("app.gameplay.systems.service_game_grid")
-
+local gamepipeline = require("app.gameplay.gamepipeline")
 local GRAVITY = GAMECONSTANT.GRAVITY
 
 local BOUNCE_VELOCITY_MIN = 105
@@ -26,10 +26,6 @@ local BASKET_CAPTURE_X = 24
 
 ---@class SystemBallPathing
 local System = class("SystemBallPathing")
-
-local function clamp(value, minimum, maximum)
-    return math.max(minimum, math.min(value, maximum))
-end
 
 local function positions_match(first, second)
     if not first or not second then
@@ -200,12 +196,11 @@ local function launch_to_target(ball, target, obstacle_radius)
         BOUNCE_VELOCITY_MIN,
         BOUNCE_VELOCITY_MAX
     ) * (ball.bounce_scale or 1)
-    -- Return impact energy according to this ball's elasticity. The bounded
-    -- height prevents a hard first impact from sending it into upper rows.
     local rebound_velocity = math.max(0, -ball.velocity.y)
         * (ball.restitution or 0.68)
         * random_between(ball, IMPACT_VARIATION_MIN, IMPACT_VARIATION_MAX)
-    local velocity_y = clamp(
+
+    local velocity_y = math.clamp(
         math.max(minimum_velocity, rebound_velocity),
         math.sqrt(2 * gravity * MIN_BOUNCE_HEIGHT),
         math.sqrt(2 * gravity * (ball.max_bounce_height or 20))
@@ -218,7 +213,7 @@ local function launch_to_target(ball, target, obstacle_radius)
 
     flight_time = math.max(flight_time, 0.05)
 
-    local velocity_x = clamp(
+    local velocity_x = math.clamp(
         dx / flight_time,
         -MAX_HORIZONTAL_SPEED,
         MAX_HORIZONTAL_SPEED
@@ -394,7 +389,7 @@ local function update_weak_correction(ball, state, dt)
     local maximum_change = MAX_CORRECTION_ACCELERATION
         * (ball.correction_scale or 1)
         * dt
-    local velocity_x = ball.velocity.x + clamp(
+    local velocity_x = ball.velocity.x + math.clamp(
         desired_velocity_x - ball.velocity.x,
         -maximum_change,
         maximum_change
@@ -405,7 +400,7 @@ local function update_weak_correction(ball, state, dt)
     end
 
     ball.velocity = vmath.vector3(
-        clamp(
+        math.clamp(
             velocity_x,
             -MAX_HORIZONTAL_SPEED,
             MAX_HORIZONTAL_SPEED
@@ -429,7 +424,7 @@ local function update_basket_capture(ball, state)
     then
         state.route_finished = true
         state.target = nil
-        table.insert(gamecontext.ball_reach_busket_events, {
+        gamepipeline.call("on_bucket_reach", {
             ball = ball,
             basket_index = target.basket_index,
         })
