@@ -7,8 +7,6 @@ local _nodes = {}
 local _basket_count = 0
 local _depth = 0
 
--- These actions only decorate a route. The left/right transition is kept, so
--- the selected basket and its configured probability never change.
 local STAY_BOUNCE_CHANCE = 0.0
 local BOUNCE_CHANCE = 0.15
 
@@ -133,7 +131,6 @@ function M.generate_path(basket_index, random_function)
 
     local path = {}
 
-    -- DFS строит basket -> top, поэтому разворачиваем в top -> basket.
     for i = #reverse_path, 1, -1 do
         path[#path + 1] = table.deepcopy(_nodes[reverse_path[i]])
     end

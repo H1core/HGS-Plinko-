@@ -19,6 +19,7 @@ end
 ---@param self gameplay_controller.script
 function init(self)
     gamecontext.clear()
+    gamecontext.go_sc = event_context_manager.get()
     msg.post(".", "acquire_input_focus")
     self.instance_gamepipeline = gamepipeline.get()
     self.is_inited = false
@@ -80,14 +81,13 @@ end
 
 ---@param pipeline GamePipeline
 function build_gameplay_systems(pipeline)
-   pipeline:add(require("app.gameplay.systems.system_preparemap")) 
-   pipeline:add(require("app.gameplay.systems.system_match_game_frame"))
+    pipeline:add(require("app.gameplay.systems.system_preparemap")) 
+    pipeline:add(require("app.gameplay.systems.system_match_game_frame"))
+    pipeline:add(require("app.gameplay.systems.system_shoot_ball_on_request"))
 
-   pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
-   pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))
-   pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
-   pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
-   pipeline:add(require("app.gameplay.systems.system_ball_reach_busket"))
-
-   pipeline:add(require("app.gameplay.systems.system_debug"))
+    pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
+    pipeline:add(require("app.gameplay.systems.system_ball_reach_busket"))
 end

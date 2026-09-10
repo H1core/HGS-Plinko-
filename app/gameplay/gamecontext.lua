@@ -1,12 +1,14 @@
 local __t = {}
 ---@class GameContext
 ---@field gui_sc table
+---@field go_sc table
 ---@field dirty bool
 ---@field clear function
 ---@field frame userdata
 ---@field balls GoBall[]
 ---@field spawn_position vector3
 ---@field ball_reach_busket_events { ball: GoBall, basket_index: integer }[]
+---@field requested_shoots integer
 ---@field set_context_table fun(t: table)
 local M = setmetatable({}, {
     __index = function(t, k)
