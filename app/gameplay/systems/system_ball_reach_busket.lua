@@ -26,8 +26,6 @@ function System:update()
         local event = self.events[event_index]
         self.events[event_index] = nil
 
-        -- Events use grid indices 0..N-1, while gamecontext.buckets is a
-        -- one-based Lua array.
         local bucket = self.buckets[event.basket_index + 1]
 
         if bucket then

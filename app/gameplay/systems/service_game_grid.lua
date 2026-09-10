@@ -8,7 +8,7 @@ local _left_x = 0
 local _top_obstacle_y = 0
 
 local BUCKET_WIDTH = 70
-local BUCKET_HEIGHT = 145
+local BUCKET_HEIGHT = 75
 local ROW_HEIGHT = 50
 
 function M.build(count)
@@ -65,6 +65,25 @@ function M.get_obstacle_pos(level, index)
         - level * _config.ROW_HEIGHT
 
     return vmath.vector3(x, y, _config.Z)
+end
+
+function M.get_closest_obstacle_flat_index(position)
+    assert(_config, "Call ServiceGameGrid.build() first")
+
+    local max_level = _row_count - 1
+    local level = math.floor(
+        (_top_obstacle_y - position.y) / _config.ROW_HEIGHT + 0.5
+    )
+    level = math.clamp(level, 0, max_level)
+
+    local index = math.floor(
+        (position.x - _config.CENTER_X) / _config.BUCKET_WIDTH
+            + level * 0.5
+            + 0.5
+    )
+    index = math.clamp(index, 0, level)
+
+    return level * (level + 1) / 2 + index + 1
 end
 
 return M

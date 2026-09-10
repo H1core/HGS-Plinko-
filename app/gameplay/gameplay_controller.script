@@ -84,7 +84,8 @@ function build_gameplay_systems(pipeline)
 
    pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
    pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))
-   pipeline:add(require("app.gameplay.systems.physics.system_ball_routing"))
+   pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
+   pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
    pipeline:add(require("app.gameplay.systems.system_ball_reach_busket"))
 
    pipeline:add(require("app.gameplay.systems.system_debug"))

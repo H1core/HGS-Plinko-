@@ -5,6 +5,9 @@ local GRAVITY = GAMECONSTANT.GRAVITY
 
 local BOUNCE_VELOCITY_MIN = 105
 local BOUNCE_VELOCITY_MAX = 130
+local IMPACT_VARIATION_MIN = 0.88
+local IMPACT_VARIATION_MAX = 1.12
+local MIN_BOUNCE_HEIGHT = 9
 local WEAK_BOUNCE_VELOCITY_MIN = 80
 local WEAK_BOUNCE_VELOCITY_MAX = 95
 local STAY_BOUNCE_VELOCITY_MIN = 135
@@ -21,8 +24,8 @@ local UNEXPECTED_RESTITUTION = 0.55
 local BASKET_CAPTURE_Y = 12
 local BASKET_CAPTURE_X = 24
 
----@class SystemBallCollision
-local System = class("SystemBallCollision")
+---@class SystemBallPathing
+local System = class("SystemBallPathing")
 
 local function clamp(value, minimum, maximum)
     return math.max(minimum, math.min(value, maximum))
@@ -191,12 +194,22 @@ local function launch_to_target(ball, target, obstacle_radius)
     local contact = target_contact_position(ball, target, obstacle_radius)
     local dx = contact.x - position.x
     local dy = contact.y - position.y
-    local velocity_y = random_between(
+    local gravity = GRAVITY * (ball.gravity_scale or 1)
+    local minimum_velocity = random_between(
         ball,
         BOUNCE_VELOCITY_MIN,
         BOUNCE_VELOCITY_MAX
     ) * (ball.bounce_scale or 1)
-    local gravity = GRAVITY * (ball.gravity_scale or 1)
+    -- Return impact energy according to this ball's elasticity. The bounded
+    -- height prevents a hard first impact from sending it into upper rows.
+    local rebound_velocity = math.max(0, -ball.velocity.y)
+        * (ball.restitution or 0.68)
+        * random_between(ball, IMPACT_VARIATION_MIN, IMPACT_VARIATION_MAX)
+    local velocity_y = clamp(
+        math.max(minimum_velocity, rebound_velocity),
+        math.sqrt(2 * gravity * MIN_BOUNCE_HEIGHT),
+        math.sqrt(2 * gravity * (ball.max_bounce_height or 20))
+    )
     local flight_time = ballistic_flight_time(
         dy,
         velocity_y,
@@ -430,7 +443,6 @@ end
 function System:awake()
     self.ball_states = setmetatable({}, { __mode = "k" })
     self.balls = gamecontext.balls
-    self.collisions = gamecontext.collisions
 end
 
 function System:update(dt)
@@ -440,21 +452,20 @@ function System:update(dt)
         state.processed_this_frame = false
     end
 
-    for _, collision in ipairs(self.collisions) do
-        for _, ball in ipairs(self.balls) do
-            local state = get_state(self, ball)
+    for _, ball in ipairs(self.balls) do
+        local state = get_state(self, ball)
+        local collision = ball.hitbox
 
-            if collision:is_collided(ball.collision) then
-                if state.active_collision == collision then
-                    state.active_collision_seen = true
-                elseif not state.processed_this_frame
-                    and not state.route_finished
-                then
-                    handle_collision(ball, state, collision)
-                    state.active_collision = collision
-                    state.active_collision_seen = true
-                    state.processed_this_frame = true
-                end
+        if collision and collision:is_collided(ball.collision) then
+            if state.active_collision == collision then
+                state.active_collision_seen = true
+            elseif not state.processed_this_frame
+                and not state.route_finished
+            then
+                handle_collision(ball, state, collision)
+                state.active_collision = collision
+                state.active_collision_seen = true
+                state.processed_this_frame = true
             end
         end
     end
