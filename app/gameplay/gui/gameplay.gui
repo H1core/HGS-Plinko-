@@ -81,9 +81,14 @@ nodes {
   template: "/app/templates/button/btn_inner_text.gui"
 }
 nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
   type: TYPE_BOX
   id: "btn_shoot_x1/root"
   parent: "btn_shoot_x1"
+  overridden_fields: 4
   template_node_child: true
 }
 nodes {
@@ -189,7 +194,7 @@ nodes {
 }
 nodes {
   type: TYPE_TEXT
-  text: "Cheats"
+  text: "Testing"
   id: "btn_cheats/shadow_text/text_shadow"
   parent: "btn_cheats/shadow_text"
   overridden_fields: 8
@@ -197,7 +202,7 @@ nodes {
 }
 nodes {
   type: TYPE_TEXT
-  text: "Cheats"
+  text: "Testing"
   id: "btn_cheats/shadow_text/text"
   parent: "btn_cheats/shadow_text"
   overridden_fields: 8
@@ -225,148 +230,64 @@ nodes {
   position {
     y: -50.0
   }
-  size {
-    x: 152.0
-    y: 90.0
-  }
-  color {
-    x: 0.88235295
-    y: 0.972549
-  }
-  type: TYPE_BOX
-  texture: "common/R45_Footer"
-  id: "shoots_inner"
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count"
   parent: "n_anchor"
   inherit_alpha: true
-  slice9 {
-    x: 45.0
-    y: 37.0
-    z: 45.0
-    w: 53.0
-  }
+  template: "/app/scripts/widgets/wdt_ball_count/wdt_balls_count.gui"
 }
 nodes {
-  position {
-    y: 11.0
-  }
-  scale {
-    x: 0.48
-    y: 0.48
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.53333336
-    y: 0.6313726
-    z: 0.99215686
-  }
-  type: TYPE_TEXT
-  text: "10"
-  font: "100px-roboto-bold"
-  id: "text"
-  outline {
-    x: 0.6627451
-    y: 0.73333335
-    z: 0.7529412
-  }
-  parent: "shoots_inner"
-  layer: "bottom_text"
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 2.0
-    y: -36.0
-  }
-  scale {
-    x: 0.55
-    y: 0.55
-  }
-  size {
-    x: 197.6
-    y: 90.0
-  }
-  color {
-    x: 0.53333336
-    y: 0.6313726
-    z: 0.99215686
-  }
   type: TYPE_BOX
-  texture: "common/R45_Footer"
-  id: "shoot_cd"
-  parent: "shoots_inner"
-  inherit_alpha: true
-  slice9 {
-    x: 45.0
-    y: 37.0
-    z: 45.0
-    w: 53.0
-  }
-}
-nodes {
-  position {
-    y: 10.333333
-  }
-  type: TYPE_TEMPLATE
-  id: "shoot_cd_text"
-  parent: "shoot_cd"
-  inherit_alpha: true
-  template: "/app/templates/text/shadow_text.gui"
-}
-nodes {
-  position {
-    x: 2.0
-    y: -2.0
-  }
-  scale {
-    x: 0.4
-    y: 0.4
-  }
-  color {
-    x: 0.4117647
-    y: 0.47843137
-    z: 0.7058824
-  }
-  type: TYPE_TEXT
-  text: "+5 in 0s"
-  id: "shoot_cd_text/text_shadow"
-  outline {
-    x: 0.4117647
-    y: 0.47843137
-    z: 0.7058824
-  }
-  parent: "shoot_cd_text"
-  overridden_fields: 1
-  overridden_fields: 3
-  overridden_fields: 5
-  overridden_fields: 8
-  overridden_fields: 15
+  id: "wdt_balls_count/root"
+  parent: "wdt_balls_count"
   template_node_child: true
 }
 nodes {
-  scale {
-    x: 0.4
-    y: 0.4
-  }
+  type: TYPE_BOX
+  id: "wdt_balls_count/shoots_inner"
+  parent: "wdt_balls_count/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count/text_cnt"
+  parent: "wdt_balls_count/shoots_inner"
+  template_node_child: true
+}
+nodes {
   type: TYPE_TEXT
-  text: "+5 in 0s"
-  id: "shoot_cd_text/text"
-  outline {
-    x: 0.4117647
-    y: 0.47843137
-    z: 0.7058824
-  }
-  parent: "shoot_cd_text"
-  overridden_fields: 1
-  overridden_fields: 3
-  overridden_fields: 5
-  overridden_fields: 8
-  overridden_fields: 15
-  overridden_fields: 16
+  id: "wdt_balls_count/text_cnt/text_shadow"
+  parent: "wdt_balls_count/text_cnt"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/text_cnt/text"
+  parent: "wdt_balls_count/text_cnt"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "wdt_balls_count/shoot_cd"
+  parent: "wdt_balls_count/shoots_inner"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count/shoot_cd_text"
+  parent: "wdt_balls_count/shoot_cd"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/shoot_cd_text/text_shadow"
+  parent: "wdt_balls_count/shoot_cd_text"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/shoot_cd_text/text"
+  parent: "wdt_balls_count/shoot_cd_text"
   template_node_child: true
 }
 layers {

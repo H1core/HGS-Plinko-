@@ -3,6 +3,9 @@ local function step_install_globals()
     require("libs.littleclass")
     require("libs.table_extensions")
     require("app.gameplay.constants")
+
+    local druid = require("druid.druid")
+    druid.register("text_size_follower", require("app.scripts.widgets.text_size_follower"))
 end
 
 local function step_load_config()
@@ -11,9 +14,16 @@ local function step_load_config()
     _G.config.buckets = json.decode(buskets_cfg) --[[@as {weights: integer[], values: integer[], gradient: GradientConfig}]]
 end
 
-
+local function step_load_storage()
+    local storage = require("app.scripts.storage")
+    task.await(function (done)
+        storage.init(done)
+    end)
+end
+local service_consumables = require("app.scripts.consumables.service_consumables")
 local function step_init_services()
     local n = #config.buckets.weights
+    service_consumables.init()
     local service_game_path = require("app.gameplay.systems.service_game_path")
     service_game_path.build_graph(n)
     local service_game_grid = require("app.gameplay.systems.service_game_grid")
@@ -37,6 +47,7 @@ end
 local steps = {
     step_install_globals,
     step_load_config,
+    step_load_storage,
     step_init_services,
     step_navigate
 }
@@ -49,4 +60,8 @@ function init(self)
             func_bootstrap_step()
         end
     end)
+end
+
+function update(self, dt)
+    service_consumables.update()
 end

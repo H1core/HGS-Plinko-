@@ -1,18 +1,40 @@
 local gamecontext = require("app.gameplay.gamecontext")
----@class gameplay.gui_script
+local druid = require("druid.druid")
+local wdt_balls_count = require("app.scripts.widgets.wdt_ball_count.wdt_balls_count")
+local service_consumables = require("app.scripts.consumables.service_consumables")
 
+---@class gameplay.gui_script
+---@field druid druid.instance
 ---@package
 ---@param self gameplay.gui_script
 function init(self)
     gamecontext.gui_sc = event_context_manager.get()
     msg.post("/core#gameplay_controller", "ready")
+    msg.post(msg.url('.'), "acquire_input_focus")
+    self.druid = druid.new(self)
+
+    local ball_consumable = service_consumables.get("balls")
+
+    self.druid:new_widget(wdt_balls_count, "wdt_balls_count")
+
+    self.druid:new_button("btn_shoot_x1/root", function ()
+        if(ball_consumable:consume()) then
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 1
+        end
+    end)
+
+    self.druid:new_button("btn_shoot_x5/root", function ()
+        if(ball_consumable:consume(5)) then
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 5
+        end
+    end)
 end
 
 ---@package
 ---@param self gameplay.gui_script
 ---@param dt number
 function update(self, dt)
-    
+    self.druid:update(dt)
 end
 
 ---@package
@@ -21,7 +43,7 @@ end
 ---@param message table
 ---@param sender url
 function on_message(self, message_id, message, sender)
-    
+    self.druid:on_message(message_id, message, sender)
 end
 
 ---@package
@@ -30,11 +52,11 @@ end
 ---@param action on_input.action
 ---@return boolean|nil
 function on_input(self, action_id, action)
-    
+   return self.druid:on_input(action_id, action) 
 end
 
 ---@package
 ---@param self gameplay.gui_script
 function final(self)
-    
+    self.druid:final()
 end
