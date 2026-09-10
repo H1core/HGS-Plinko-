@@ -102,6 +102,11 @@ function M:add(count, now)
     return added
 end
 
+function M:add_unsafe(count)
+    self.state.c = self.state.c + count
+    self.event_changed:trigger(self.state.c)
+end
+
 function M:consume(count)
     count = count or 1
     count = math.floor(count)

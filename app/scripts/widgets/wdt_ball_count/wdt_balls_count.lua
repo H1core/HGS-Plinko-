@@ -40,7 +40,7 @@ function M:build_cd()
 		:new_text_size_follower(self.cd_txt)
 		:add_follower(self.cd_inner)
 		:use_scaled_size_set()
-		:set_size_bias(vmath.vector3(-10,0,0))
+		:set_size_bias(vmath.vector3(-6,0,0))
 		:update_view()
 end
 
