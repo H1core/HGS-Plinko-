@@ -8,41 +8,10 @@ local time_provider = require("app.scripts.provider_time_local")
 local M = {}
 M.__index = M
 
-local function get_number(value, fallback)
-    if type(value) == "number" then
-        return value
-    end
-    return fallback
-end
-
-local function normalize_config(cfg)
-    cfg = cfg or {}
-
-    local initial = get_number(cfg.initial, get_number(cfg.initial_count, get_number(cfg.count, 0)))
-    local max = get_number(cfg.max, get_number(cfg.max_count, get_number(cfg.capacity, initial)))
-    local cooldown = get_number(cfg.cooldown, get_number(cfg.cooldown_secs, 0))
-    local recovery_amount = get_number(
-        cfg.recovery_amount,
-        get_number(cfg.restore_amount, get_number(cfg.amount_per_cooldown, 0))
-    )
-
-    initial = math.max(0, math.floor(initial))
-    max = math.max(initial, math.floor(max))
-    cooldown = math.max(0, cooldown)
-    recovery_amount = math.max(0, math.floor(recovery_amount))
-
-    return {
-        initial = math.min(initial, max),
-        max = max,
-        cooldown = cooldown,
-        recovery_amount = recovery_amount
-    }
-end
-
 function M.new(key, cfg)
     return setmetatable({
         key = key,
-        cfg = normalize_config(cfg),
+        cfg = cfg,
         event_changed = event.create(),
     }, M)
 end
@@ -58,12 +27,9 @@ function M:init(now)
         }
     else
         self.state = saved_state
-        self.state.c = math.max(0, math.floor(get_number(self.state.c, get_number(self.state.count, self.cfg.initial))))
+        self.state.c = math.max(0, (self.state.c or self.state.initial))
         self.state.c = math.min(self.state.c, self.cfg.max)
-        self.state.last_update = get_number(
-            self.state.last_update,
-            get_number(self.state.updated_at, get_number(self.state.t, now))
-        )
+        self.state.last_update = self.state.updated_at or now
     end
 
     if self.state.c >= self.cfg.max and self.state.last_update ~= now then

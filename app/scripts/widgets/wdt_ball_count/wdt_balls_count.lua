@@ -56,10 +56,12 @@ function M:build_cnt()
 	end, nil)
 
 	self.txt_inner = self:get_node("shoots_inner")
-	self.consumable.event_changed:subscribe(function (cnt)
+	self.func_consumable_changed = function (cnt)
 		self.txt_cnt:set_text(cnt)
 		self.func_update_cd_view()
-	end)
+	end
+	self.consumable.event_changed:subscribe(self.func_consumable_changed)
+
 	self.txt_cnt:set_text(self.consumable:count())
 	self.druid
 		:new_text_size_follower(self.txt_cnt)
@@ -67,4 +69,9 @@ function M:build_cnt()
 		:set_size_bias(vmath.vector3(64,0,0))
 		:update_view()
 end
+
+function M:on_remove()
+	self.consumable.event_changed:unsubscribe(self.func_consumable_changed)
+end
+
 return M
