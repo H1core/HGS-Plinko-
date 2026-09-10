@@ -14,6 +14,14 @@ function M.new(url)
     }, M)
 end
 
+function M:set_color(col_hex)
+    go.set(msg.url(nil, self.go_url, "sprite"), "tint", col_hex)
+end
+
+function M:set_text(text)
+    label.set_text(msg.url(nil, self.go_url, "label"), text)
+end
+
 function M:animate_catch()
     if(self.is_animating) then
         go.cancel_animations(self.go_url)

@@ -17,13 +17,14 @@
         3,
         5
     ],
-    "colors": [
-        "FFFFFF",
-        "FFFFFF",
-        "FFFFFF",
-        "FFFFFF",
-        "FFFFFF",
-        "FFFFFF",
-        "FFFFFF"
+    "gradient": [
+        {
+            "v": 0,
+            "c": "#FF9500"
+        },
+        {
+            "v": 1,
+            "c": "#FFF700"
+        }
     ]
 }

@@ -1,7 +1,9 @@
 local gamecontext = require("app.gameplay.gamecontext")
 local service_game_grid = require("app.gameplay.systems.service_game_grid")
 local collision_circle = require("app.gameplay.systems.physics.collision_circle")
+local provider_bucket_color = require("app.gameplay.systems.buckets.provider_bucket_color")
 local gameobject_bucket = require("app.gameplay.systems.buckets.gameobject_bucket")
+
 ---@class SystemPrepareMap
 local M = class("SystemMap")
 
@@ -21,10 +23,13 @@ function M:awake()
 
     ---@return userdata
     ---@param pos vector3
-    self.create_bucket = function (pos)
+    self.create_bucket = function (i, pos)
         local url_go_bucket = factory.create("/factories#factory_bucket", pos)
         go.set_parent(url_go_bucket, gamecontext.frame)
-        table.insert(gamecontext.buckets, gameobject_bucket.new(url_go_bucket))
+        local go_bucket = gameobject_bucket.new(url_go_bucket)
+        table.insert(gamecontext.buckets, go_bucket)
+        go_bucket:set_color(provider_bucket_color.get(i))
+        go_bucket:set_text(config.buckets.values[i + 1])
         return url_go_bucket
     end
     ---@return userdata
@@ -36,16 +41,15 @@ function M:awake()
         return url_go_obstacle
     end
 
-    local n = #config.baskets
-    -- N configured outcomes require N baskets and N - 1 peg rows.
+    local n = #config.buckets.weights
+
     for i = 0, n - 1 do
-        self.create_bucket(service_game_grid.get_bucket_pos(i))
+        self.create_bucket(i, service_game_grid.get_bucket_pos(i))
     end
 
     for i = 0, n - 2 do
         for j = 0, i do
             self.create_obstacle(service_game_grid.get_obstacle_pos(i, j))
-            
         end
     end
 end
