@@ -3,7 +3,9 @@ local druid = require("druid.druid")
 local wdt_balls_count = require("app.scripts.widgets.wdt_ball_count.wdt_balls_count")
 local service_consumables = require("app.scripts.consumables.service_consumables")
 local property_panel = require("app.scripts.widgets.properties_panel.properties_panel")
+local command_run_gameplay = require("app.gameplay.features.command_run_gameplay")
 
+local monarch = require("monarch.monarch")
 ---@class gameplay.gui_script
 ---@field druid druid.instance
 ---@field panel druid.widget.properties_panel
@@ -17,7 +19,7 @@ function init(self)
 
     local ball_consumable = service_consumables.get("balls")
 
-    self.druid:new_widget(wdt_balls_count, "wdt_balls_count")
+    self.druid:new_widget(wdt_balls_count, "wdt_balls_count") --[[@as widget.wdt_balls_count]]
 
     self.druid:new_button("btn_shoot_x1/root", function ()
         if(ball_consumable:consume()) then
@@ -95,9 +97,58 @@ function build_properties_panel(self)
 
     self.panel:add_button(function (button)
         button:set_text_property("Stress Test")
-        button:set_text_button(":)")
+        button:set_text_button("1000BALLS")
          button.button.on_click:subscribe(function ()
             gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 1000
         end)
     end)
+
+    self.panel:add_text(function (text)
+        text:set_text_property("Buckets Section")
+    end)
+
+    local _weight = 1
+    self.panel:add_input(function (input)
+        input:set_text_property("Weight")
+        input:set_text_value("1")
+        input.rich_input:set_allowed_characters("[%d]")
+        input.on_change_value:subscribe(function (val)
+            _weight = tonumber(val)
+        end)
+    end)
+
+    local _value = 1
+    self.panel:add_input(function (input)
+        input:set_text_property("Value")
+        input:set_text_value("1")
+        input.rich_input:set_allowed_characters("[%d]")
+        input.on_change_value:subscribe(function (val)
+            _value = tonumber(val)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Add bucket")
+        button.button.on_click:subscribe(function ()
+            table.insert(config.buckets.values, _value)
+            table.insert(config.buckets.weights, _weight)
+            command_run_gameplay.execute()
+        end)
+
+        
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Remove bucket")
+        button.button.on_click:subscribe(function ()
+            if(#config.buckets.weights > 1) then
+                table.remove(config.buckets.weights)
+                table.remove(config.buckets.values)
+                command_run_gameplay.execute()
+            end
+        end)
+    end)
+
 end
