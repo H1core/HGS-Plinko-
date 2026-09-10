@@ -25,4 +25,10 @@ images {
 images {
   image: "/app/media/sprites/game/S_Busket.png"
 }
+images {
+  image: "/app/media/sprites/common/Gradient-100PX.png"
+}
+images {
+  image: "/app/media/sprites/common/R45_Footer.png"
+}
 extrude_borders: 2

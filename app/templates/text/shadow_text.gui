@@ -1,0 +1,53 @@
+fonts {
+  name: "100px-roboto-bold"
+  font: "/app/media/font/100px-roboto-bold.font"
+}
+nodes {
+  position {
+    x: 4.0
+    y: -5.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "Hello!"
+  font: "100px-roboto-bold"
+  id: "text_shadow"
+  layer: "bottom_text"
+  inherit_alpha: true
+  shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "Hello!"
+  font: "100px-roboto-bold"
+  id: "text"
+  layer: "bottom_text"
+  inherit_alpha: true
+  shadow_alpha: 0.0
+}
+layers {
+  name: "bottom"
+}
+layers {
+  name: "bottom_text"
+}
+layers {
+  name: "top"
+}
+layers {
+  name: "top_text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
