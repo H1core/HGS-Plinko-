@@ -9,6 +9,7 @@ width = 768
 height = 1336
 high_dpi = 1
 update_frequency = 120
+samples = 4
 
 [android]
 input_method = HiddenInputField

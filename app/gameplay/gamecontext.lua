@@ -5,7 +5,8 @@ local __t = {}
 ---@field clear function
 ---@field frame userdata
 ---@field balls GoBall[]
----@field ball_reach_busket_events { ball: GoBall, basket_index: integer }[] Zero-based basket index.
+---@field spawn_position vector3
+---@field ball_reach_busket_events { ball: GoBall, basket_index: integer }[]
 ---@field set_context_table fun(t: table)
 local M = setmetatable({}, {
     __index = function(t, k)

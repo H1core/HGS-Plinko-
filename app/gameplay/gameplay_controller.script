@@ -81,6 +81,7 @@ end
 ---@param pipeline GamePipeline
 function build_gameplay_systems(pipeline)
    pipeline:add(require("app.gameplay.systems.system_preparemap")) 
+   pipeline:add(require("app.gameplay.systems.system_match_game_frame"))
 
    pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
    pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))

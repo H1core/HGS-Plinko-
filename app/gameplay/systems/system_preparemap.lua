@@ -21,6 +21,14 @@ function M:awake()
     gamecontext.balls = {}
     gamecontext.buckets = {}
 
+    local top_obstacle = service_game_grid.get_obstacle_pos(0, 0)
+    local frame_settings = GAMECONSTANT.GAME_FRAME
+    gamecontext.spawn_position = vmath.vector3(
+        top_obstacle.x,
+        top_obstacle.y + frame_settings.BALL_RADIUS + frame_settings.SPAWN_Y_BIAS,
+        top_obstacle.z
+    )
+
     ---@return userdata
     ---@param pos vector3
     self.create_bucket = function (i, pos)

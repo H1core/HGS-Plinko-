@@ -7,9 +7,9 @@ local _row_count = 0
 local _left_x = 0
 local _top_obstacle_y = 0
 
-local BUCKET_WIDTH = 70
-local BUCKET_HEIGHT = 75
-local ROW_HEIGHT = 50
+local BUCKET_WIDTH = 52.5
+local BUCKET_HEIGHT = 120
+local ROW_HEIGHT = 70
 
 function M.build(count)
     _config = {
@@ -18,7 +18,7 @@ function M.build(count)
         ROW_HEIGHT = ROW_HEIGHT,
         BUCKET_HEIGHT = BUCKET_HEIGHT,
         CENTER_X = 0,
-        BOTTOM_Y = -250,
+        BOTTOM_Y = 0,
         Z = 0,
     }
 
@@ -65,6 +65,17 @@ function M.get_obstacle_pos(level, index)
         - level * _config.ROW_HEIGHT
 
     return vmath.vector3(x, y, _config.Z)
+end
+
+-- Logical field extents; visual allowances are owned by the framing system.
+function M.get_frame_geometry()
+    assert(_config, "Call ServiceGameGrid.build() first")
+    return {
+        left = M.get_bucket_pos(0).x,
+        right = M.get_bucket_pos(_config.COUNT - 1).x,
+        bottom = _config.BOTTOM_Y,
+        top = _top_obstacle_y,
+    }
 end
 
 function M.get_closest_obstacle_flat_index(position)

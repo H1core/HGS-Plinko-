@@ -1,3 +1,385 @@
 script: "/app/gameplay/gui/gui_gameplay_initializer.gui_script"
+fonts {
+  name: "100px-roboto-bold"
+  font: "/app/media/font/100px-roboto-bold.font"
+}
+textures {
+  name: "common"
+  texture: "/app/media/atlasses/common.atlas"
+}
+nodes {
+  position {
+    x: 384.0
+    y: 668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "s_anchor"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_S
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 1.0
+  }
+  size {
+    x: 650.0
+    y: 128.0
+  }
+  color {
+    x: 0.96862745
+    y: 0.9098039
+    z: 0.7882353
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "footer_inner"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_S
+  parent: "s_anchor"
+  layer: "bottom"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    x: -202.0
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x1"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x1/root"
+  parent: "btn_shoot_x1"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x1/inner"
+  parent: "btn_shoot_x1/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x1/shadow_text"
+  parent: "btn_shoot_x1/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x1"
+  id: "btn_shoot_x1/shadow_text/text_shadow"
+  parent: "btn_shoot_x1/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x1"
+  id: "btn_shoot_x1/shadow_text/text"
+  parent: "btn_shoot_x1/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x5"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x5/root"
+  parent: "btn_shoot_x5"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x5/inner"
+  parent: "btn_shoot_x5/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x5/shadow_text"
+  parent: "btn_shoot_x5/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x5"
+  id: "btn_shoot_x5/shadow_text/text_shadow"
+  parent: "btn_shoot_x5/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x5"
+  id: "btn_shoot_x5/shadow_text/text"
+  parent: "btn_shoot_x5/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 200.0
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_cheats"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_cheats/root"
+  parent: "btn_cheats"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_cheats/inner"
+  parent: "btn_cheats/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_cheats/shadow_text"
+  parent: "btn_cheats/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "Cheats"
+  id: "btn_cheats/shadow_text/text_shadow"
+  parent: "btn_cheats/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "Cheats"
+  id: "btn_cheats/shadow_text/text"
+  parent: "btn_cheats/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    y: 668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "n_anchor"
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_N
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -50.0
+  }
+  size {
+    x: 152.0
+    y: 90.0
+  }
+  color {
+    x: 0.88235295
+    y: 0.972549
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "shoots_inner"
+  parent: "n_anchor"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    y: 11.0
+  }
+  scale {
+    x: 0.48
+    y: 0.48
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.53333336
+    y: 0.6313726
+    z: 0.99215686
+  }
+  type: TYPE_TEXT
+  text: "10"
+  font: "100px-roboto-bold"
+  id: "text"
+  outline {
+    x: 0.6627451
+    y: 0.73333335
+    z: 0.7529412
+  }
+  parent: "shoots_inner"
+  layer: "bottom_text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 2.0
+    y: -36.0
+  }
+  scale {
+    x: 0.55
+    y: 0.55
+  }
+  size {
+    x: 197.6
+    y: 90.0
+  }
+  color {
+    x: 0.53333336
+    y: 0.6313726
+    z: 0.99215686
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "shoot_cd"
+  parent: "shoots_inner"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    y: 10.333333
+  }
+  type: TYPE_TEMPLATE
+  id: "shoot_cd_text"
+  parent: "shoot_cd"
+  inherit_alpha: true
+  template: "/app/templates/text/shadow_text.gui"
+}
+nodes {
+  position {
+    x: 2.0
+    y: -2.0
+  }
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  color {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  type: TYPE_TEXT
+  text: "+5 in 0s"
+  id: "shoot_cd_text/text_shadow"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "shoot_cd_text"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  template_node_child: true
+}
+nodes {
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  type: TYPE_TEXT
+  text: "+5 in 0s"
+  id: "shoot_cd_text/text"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "shoot_cd_text"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  overridden_fields: 16
+  template_node_child: true
+}
+layers {
+  name: "bottom"
+}
+layers {
+  name: "bottom_text"
+}
+layers {
+  name: "top"
+}
+layers {
+  name: "top_text"
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
