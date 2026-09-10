@@ -1,4 +1,6 @@
 {
+    "initial_balls_count": 25,
     "max_balls_capacity": 50,
-    "ball_recovery_duration_secs": 0.5
+    "ball_recovery_duration_secs": 2.5,
+    "ball_recovery_amount": 5
 }
