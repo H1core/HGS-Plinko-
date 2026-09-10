@@ -2,9 +2,11 @@ local gamecontext = require("app.gameplay.gamecontext")
 local druid = require("druid.druid")
 local wdt_balls_count = require("app.scripts.widgets.wdt_ball_count.wdt_balls_count")
 local service_consumables = require("app.scripts.consumables.service_consumables")
+local property_panel = require("app.scripts.widgets.properties_panel.properties_panel")
 
 ---@class gameplay.gui_script
 ---@field druid druid.instance
+---@field panel druid.widget.properties_panel
 ---@package
 ---@param self gameplay.gui_script
 function init(self)
@@ -28,6 +30,14 @@ function init(self)
             gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 5
         end
     end)
+
+    local _testing_panel_enabled = false
+    self.druid:new_button("btn_cheats/root", function ()
+        _testing_panel_enabled = not _testing_panel_enabled
+        gui.set_enabled(self.panel.root, _testing_panel_enabled)
+    end)
+
+    build_properties_panel(self)
 end
 
 ---@package
@@ -59,4 +69,35 @@ end
 ---@param self gameplay.gui_script
 function final(self)
     self.druid:final()
+end
+---@package
+---@param self gameplay.gui_script
+function build_properties_panel(self)
+    local panel = self.druid:new_widget(property_panel, "properties_panel") --[[@as druid.widget.properties_panel]]
+    local ball_consumable = service_consumables.get("balls")
+    self.panel = panel
+
+    self.panel:add_checkbox(function (checkbox)
+        checkbox:set_value(false, true)
+        checkbox:set_text_property("Debugging")
+        checkbox:on_change(function (is_debugging)
+            gamecontext.debugging = is_debugging
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("Add Balls")
+        button:set_text_button("x50")
+        button.button.on_click:subscribe(function ()
+            ball_consumable:add_unsafe(50)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("Stress Test")
+        button:set_text_button(":)")
+         button.button.on_click:subscribe(function ()
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 1000
+        end)
+    end)
 end
