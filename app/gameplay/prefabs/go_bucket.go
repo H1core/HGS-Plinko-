@@ -16,6 +16,10 @@ embedded_components {
   position {
     z: 1.0
   }
+  scale {
+    x: 0.75
+    y: 0.75
+  }
 }
 embedded_components {
   id: "label"
@@ -24,21 +28,46 @@ embedded_components {
   "  x: 200.0\n"
   "  y: 80.0\n"
   "}\n"
-  "color {\n"
-  "  x: 0.101960786\n"
-  "  y: 0.101960786\n"
-  "  z: 0.101960786\n"
-  "}\n"
   "text: \"0.2x\"\n"
-  "font: \"/app/media/font/100px-roboto-bold.font\"\n"
+  "font: \"/app/media/font/16px-numbers-roboto-bold-df.font\"\n"
   "material: \"/builtins/fonts/label-df.material\"\n"
   ""
   position {
-    y: 6.0
+    x: -1.0
+    y: 5.0
     z: 1.1
   }
   scale {
-    x: 0.18
-    y: 0.18
+    x: 0.25
+    y: 0.25
+  }
+}
+embedded_components {
+  id: "label_shadow"
+  type: "label"
+  data: "size {\n"
+  "  x: 200.0\n"
+  "  y: 80.0\n"
+  "}\n"
+  "color {\n"
+  "  x: 0.0\n"
+  "  y: 0.0\n"
+  "  z: 0.0\n"
+  "}\n"
+  "outline {\n"
+  "  w: 0.0\n"
+  "}\n"
+  "text: \"0.2x\"\n"
+  "font: \"/app/media/font/16px-numbers-roboto-bold-df.font\"\n"
+  "material: \"/builtins/fonts/label-df.material\"\n"
+  ""
+  position {
+    x: 0.15
+    y: 3.7
+    z: 1.0
+  }
+  scale {
+    x: 0.25
+    y: 0.25
   }
 }

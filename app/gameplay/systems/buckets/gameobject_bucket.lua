@@ -1,5 +1,5 @@
 local ANIM_BIAS_V = vmath.vector3(0,-15,0)
-
+local color = require("libs.color")
 ---@class GoBucket
 ---@field go_url userdata
 ---@field pos vector3
@@ -16,10 +16,19 @@ end
 
 function M:set_color(col_hex)
     go.set(msg.url(nil, self.go_url, "sprite"), "tint", col_hex)
+    local url_label = msg.url(nil, self.go_url, "label")
+    local url_shadow = msg.url(nil, self.go_url, "label_shadow")
+    local darken_col = color.darken(col_hex, 0.35)
+    go.set(url_label, "outline", darken_col)
+    go.set(url_shadow, "outline", darken_col)
+    go.set(url_shadow, "color", darken_col)
 end
 
 function M:set_text(text)
-    label.set_text(msg.url(nil, self.go_url, "label"), text)
+    local url_label = msg.url(nil, self.go_url, "label")
+    local url_shadow = msg.url(nil, self.go_url, "label_shadow")
+    label.set_text(url_label, text)
+    label.set_text(url_shadow, text)
 end
 
 function M:animate_catch()

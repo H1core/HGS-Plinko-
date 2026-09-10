@@ -12,6 +12,17 @@ function M.lighten(color, k)
 	return color + (vector_one - color) * k
 end
 
+function M.darken(color, k)
+    k = math.max(0, math.min(1, k))
+
+    return vmath.vector4(
+        color.x * (1 - k),
+        color.y * (1 - k),
+        color.z * (1 - k),
+        color.w
+    )
+end
+
 ---Lerp colors via color HSB values
 ---@param t number Lerp value. 0 - color1, 1 - color2
 ---@param color1 vector4 Color 1
