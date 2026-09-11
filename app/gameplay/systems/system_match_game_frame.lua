@@ -1,4 +1,4 @@
-local grid = require("app.gameplay.systems.service_game_grid")
+local grid = require("app.gameplay.systems.map.service_game_grid")
 local gamecontext = require("app.gameplay.gamecontext")
 
 ---@class SystemMatchGameFrame

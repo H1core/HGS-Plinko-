@@ -1,3 +1,5 @@
+local global_controller = require("app.scripts.global_controller")
+
 local function step_install_globals()
     require("libs.math")
     require("libs.littleclass")
@@ -26,16 +28,17 @@ local function step_init_services()
     service_consumables.init()
     local service_sounds = require("app.scripts.service_sounds")
     service_sounds.init()
+    global_controller.add_controller(service_consumables)
+    local provider_level = require("app.gameplay.systems.provider_level")
+    provider_level.init(table.deepcopy(config.buckets))
 end
 
 local function step_navigate()
     --initialize monarch
     task.delay(0)
-    local command_run_gameplay = require("app.gameplay.features.command_run_gameplay")
+    local command_run_gameplay = require("app.gameplay.command_run_gameplay")
     command_run_gameplay.execute()
 end
-
-
 
 ---@type function[]
 local steps = {
@@ -57,5 +60,5 @@ function init(self)
 end
 
 function update(self, dt)
-    service_consumables.update()
+    global_controller.update(dt)
 end

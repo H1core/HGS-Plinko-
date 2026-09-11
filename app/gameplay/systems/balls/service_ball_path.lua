@@ -19,8 +19,6 @@ local function random01(random_function)
 end
 
 function M.build_graph(basket_count)
-    helper.assert_integer(basket_count, "basket_count", 2)
-
     _basket_count = basket_count
     _depth = basket_count - 1
     _graph_transitions = {}
@@ -122,8 +120,6 @@ local function find_reverse_path(start_id, random_function)
 end
 
 function M.generate_path(basket_index, random_function)
-    helper.assert_integer(basket_index, "basket_index", 1)
-
     local basket_id = helper.get_node_id(_depth, basket_index)
     local reverse_path = find_reverse_path(basket_id, random_function)
 

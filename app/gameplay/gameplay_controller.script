@@ -86,15 +86,18 @@ end
 
 ---@param pipeline GamePipeline
 function build_gameplay_systems(pipeline)
-    pipeline:add(require("app.gameplay.systems.system_preparemap")) 
+    pipeline:add(require("app.gameplay.systems.map.system_build_map")) 
     pipeline:add(require("app.gameplay.systems.system_match_game_frame"))
-    pipeline:add(require("app.gameplay.systems.system_shoot_ball_on_request"))
+    pipeline:add(require("app.gameplay.systems.balls.system_shoot_ball_on_request"))
 
     pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
     pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))
     pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
     pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
-    pipeline:add(require("app.gameplay.systems.system_ball_reach_busket"))
+    pipeline:add(require("app.gameplay.systems.balls.system_ball_reach_busket"))
 
     pipeline:add(require("app.gameplay.systems.system_debug"))
+
+    pipeline:add(require("app.gameplay.systems.session.system_session_snapshot"))
+
 end

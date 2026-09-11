@@ -1,20 +1,18 @@
 local gamecontext = require("app.gameplay.gamecontext")
-local service_game_grid = require("app.gameplay.systems.service_game_grid")
+local service_game_grid = require("app.gameplay.systems.map.service_game_grid")
 local collision_circle = require("app.gameplay.systems.physics.collision_circle")
-local provider_bucket_color = require("app.gameplay.systems.buckets.provider_bucket_color")
-local gameobject_bucket = require("app.gameplay.systems.buckets.gameobject_bucket")
-
----@class SystemPrepareMap
+local provider_bucket_color = require("app.gameplay.systems.map.provider_bucket_color")
+local gameobject_bucket = require("app.gameplay.systems.map.gameobject_bucket")
+local provider_level = require("app.gameplay.systems.provider_level")
+---@class SystemBuildMap
 local M = class("SystemMap")
-
-function M:initialize()
-    
-end
 
 function M:awake()
     ---@class GameContext
     ---@field buckets GoBucket[]
     ---@field collisions Collision[]
+
+    local lvl = provider_level.get()
 
     local collisions = {}
     gamecontext.collisions = collisions
@@ -37,7 +35,7 @@ function M:awake()
         local go_bucket = gameobject_bucket.new(url_go_bucket)
         table.insert(gamecontext.buckets, go_bucket)
         go_bucket:set_color(provider_bucket_color.get(i))
-        go_bucket:set_text(config.buckets.values[i + 1])
+        go_bucket:set_text(lvl.values[i + 1])
         return url_go_bucket
     end
     ---@return userdata
@@ -49,7 +47,7 @@ function M:awake()
         return url_go_obstacle
     end
 
-    local n = #config.buckets.weights
+    local n = #lvl.weights
 
     for i = 0, n - 1 do
         self.create_bucket(i, service_game_grid.get_bucket_pos(i))

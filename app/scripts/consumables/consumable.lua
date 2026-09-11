@@ -29,7 +29,7 @@ function M:init(now)
         self.state = saved_state
         self.state.c = math.max(0, (self.state.c or self.state.initial))
         self.state.c = math.min(self.state.c, self.cfg.max)
-        self.state.last_update = self.state.updated_at or now
+        self.state.last_update = self.state.last_update or now
     end
 
     if self.state.c >= self.cfg.max and self.state.last_update ~= now then

@@ -1,5 +1,5 @@
 local gamecontext = require('app.gameplay.gamecontext')
-local command_shoot_ball = require("app.gameplay.systems.command_shoot_ball")
+local provider_level = require("app.gameplay.systems.provider_level")
 ---@class SystemDebug
 local System = class("SystemDebug")
 
@@ -10,6 +10,7 @@ end
 
 function System:awake()
     gamecontext.stats = {score = 0, buckets_reaches = {}, total_reaches = 0}
+    self.level = provider_level.get()
 end
 
 function System:debug()
@@ -28,7 +29,7 @@ function System:debug()
 end
 
 function System:on_bucket_reach(data)
-    gamecontext.stats.score = gamecontext.stats.score + config.buckets.values[data.basket_index + 1]
+    gamecontext.stats.score = gamecontext.stats.score + self.level.values[data.basket_index + 1]
     gamecontext.stats.buckets_reaches[data.basket_index] = (gamecontext.stats.buckets_reaches[data.basket_index] or 0) + 1
     gamecontext.stats.total_reaches = gamecontext.stats.total_reaches + 1 
 end

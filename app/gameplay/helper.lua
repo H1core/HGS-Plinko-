@@ -4,24 +4,26 @@ function M.get_node_id(level, index)
     return level * (level + 1) / 2 + index
 end
 
-function M.assert_integer(value, name, minimum)
-    assert(
-        type(value) == "number"
-            and value == math.floor(value)
-            and (minimum == nil or value >= minimum),
-        string.format(
-            "%s must be an integer%s",
-            name,
-            minimum and (" >= " .. minimum) or ""
-        )
-    )
+function M.level_hash(level_state)
+    local h = 5381
+    local function hash_number(n)
+        h = (h * 33 + math.floor(n)) % 0x7FFFFFFF
+    end
+
+    local function traverse(value)
+        if type(value) == "number" then
+            hash_number(value)
+        elseif type(value) == "table" then
+            for _, v in pairs(value) do
+                traverse(v)
+            end
+        end
+    end   
+    
+    traverse(level_state)
+    return h
+    
 end
 
-function M.assert_positive_number(value, name)
-    assert(
-        type(value) == "number" and value > 0,
-        name .. " must be greater than zero"
-    )
-end
 
 return M

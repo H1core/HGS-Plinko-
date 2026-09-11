@@ -1,17 +1,8 @@
 local gamecontext = require("app.gameplay.gamecontext")
-local service_game_grid = require("app.gameplay.systems.service_game_grid")
 local gamepipeline = require("app.gameplay.gamepipeline")
 local GRAVITY = GAMECONSTANT.GRAVITY
 
-local BOUNCE_VELOCITY_MIN = 105
-local BOUNCE_VELOCITY_MAX = 130
-local IMPACT_VARIATION_MIN = 0.88
-local IMPACT_VARIATION_MAX = 1.12
 local MIN_BOUNCE_HEIGHT = 9
-local WEAK_BOUNCE_VELOCITY_MIN = 80
-local WEAK_BOUNCE_VELOCITY_MAX = 95
-local STAY_BOUNCE_VELOCITY_MIN = 135
-local STAY_BOUNCE_VELOCITY_MAX = 160
 
 local MAX_CORRECTION_ACCELERATION = 90
 local CORRECTION_FLIGHT_PART = 0.5
@@ -27,7 +18,47 @@ local BASKET_CAPTURE_X = 24
 ---@class SystemBallPathing
 local System = class("SystemBallPathing")
 
-local function positions_match(first, second)
+function System:awake()
+    self.balls = gamecontext.balls
+end
+
+function System:update(dt)
+    for index = #self.balls, 1, -1 do
+        local ball = self.balls[index]
+        self:handle_collision(ball)
+
+        if ball.pathing_state.route_finished then
+            return
+        end
+
+        self:update_weak_correction(ball, ball.pathing_state, dt)
+        self:update_basket_capture(ball, ball.pathing_state)
+    end
+end
+
+function System:handle_collision(ball)
+    local state = ball.pathing_state
+    local collision = ball.hitbox
+    state.active_collision_seen = false
+    state.processed_this_frame = false
+
+    if collision and collision:is_collided(ball.collision) then
+        if self:positions_match(state.active_collision, collision:get_position()) then
+            state.active_collision_seen = true
+        elseif not state.route_finished then
+            self:respond_to_collision(ball, state, collision)
+            state.active_collision = vmath.vector3(collision:get_position())
+            state.active_collision_seen = true
+            state.processed_this_frame = true
+        end
+    end
+
+    if state.active_collision and not state.active_collision_seen then
+        state.active_collision = nil
+    end
+end
+
+function System:positions_match(first, second)
     if not first or not second then
         return false
     end
@@ -37,41 +68,7 @@ local function positions_match(first, second)
     return dx * dx + dy * dy <= POSITION_MATCH_EPSILON
 end
 
-local function random_between(ball, minimum, maximum)
-    local random_function = ball.random_function
-    local value = random_function and random_function() or math.random()
-    return minimum + (maximum - minimum) * value
-end
-
-local function new_state()
-    return {
-        route_started = false,
-        route_finished = false,
-        target = nil,
-        pending_target = nil,
-        maneuver_position = nil,
-        active_collision = nil,
-        active_collision_seen = false,
-        processed_this_frame = false,
-    }
-end
-
-local function get_state(self, ball)
-    if not self.ball_states then
-        self.ball_states = setmetatable({}, { __mode = "k" })
-    end
-
-    local state = self.ball_states[ball]
-
-    if not state then
-        state = new_state()
-        self.ball_states[ball] = state
-    end
-
-    return state
-end
-
-local function resolve_overlap(ball, collision)
+function System:resolve_overlap(ball, collision)
     local ball_position = ball:get_pos()
     local obstacle_position = collision:get_position()
     local dx = ball_position.x - obstacle_position.x
@@ -105,61 +102,18 @@ local function resolve_overlap(ball, collision)
     return normal_x, normal_y
 end
 
-local function register_hit(collision)
+function System:register_hit(collision)
     table.insert(gamecontext.hit_positions, collision:get_position())
 end
 
-local function next_route_target(ball)
-    local path = ball.path
-
-    if not path or #path == 0 then
-        return nil
-    end
-
-    local path_index = ball.path_it or 1
-    local next_node = path[path_index + 1]
-
-    if next_node then
-        ball.path_it = path_index + 1
-
-        if next_node.type == "basket" then
-            local grid_basket_index = next_node.index - 1
-
-            return {
-                position = service_game_grid.get_bucket_pos(
-                    grid_basket_index
-                ),
-                basket_index = grid_basket_index,
-                direction = next_node.direction,
-                bounce_type = "direct",
-                is_basket = true,
-            }
-        end
-
-        return {
-            position = service_game_grid.get_obstacle_pos(
-                next_node.level,
-                next_node.index - 1
-            ),
-            direction = next_node.direction,
-            bounce_type = next_node.bounce_type or "direct",
-            is_basket = false,
-        }
-    end
-
-    local basket_node = path[#path]
-    local grid_basket_index = basket_node.index - 1
-
-    return {
-        position = service_game_grid.get_bucket_pos(grid_basket_index),
-        basket_index = grid_basket_index,
-        direction = nil,
-        bounce_type = "direct",
-        is_basket = true,
-    }
+function System:next_route_target(ball)
+    local index = ball.path_it + 1
+    local target = ball.route_targets[index]
+    if target then ball.path_it = index end
+    return target
 end
 
-local function target_contact_position(ball, target, obstacle_radius)
+function System:target_contact_position(ball, target, obstacle_radius)
     if target.is_basket then
         return vmath.vector3(
             target.position.x,
@@ -175,7 +129,7 @@ local function target_contact_position(ball, target, obstacle_radius)
     )
 end
 
-local function ballistic_flight_time(dy, velocity_y, gravity)
+function System:ballistic_flight_time(dy, velocity_y, gravity)
     local discriminant = velocity_y * velocity_y - 2 * gravity * dy
 
     if discriminant < 0 then
@@ -185,27 +139,23 @@ local function ballistic_flight_time(dy, velocity_y, gravity)
     return (velocity_y + math.sqrt(discriminant)) / gravity
 end
 
-local function launch_to_target(ball, target, obstacle_radius)
+function System:launch_to_target(ball, target, obstacle_radius)
     local position = ball:get_pos()
-    local contact = target_contact_position(ball, target, obstacle_radius)
+    local contact = self:target_contact_position(ball, target, obstacle_radius)
     local dx = contact.x - position.x
     local dy = contact.y - position.y
     local gravity = GRAVITY * (ball.gravity_scale or 1)
-    local minimum_velocity = random_between(
-        ball,
-        BOUNCE_VELOCITY_MIN,
-        BOUNCE_VELOCITY_MAX
-    ) * (ball.bounce_scale or 1)
+    local minimum_velocity = target.minimum_velocity
     local rebound_velocity = math.max(0, -ball.velocity.y)
         * (ball.restitution or 0.68)
-        * random_between(ball, IMPACT_VARIATION_MIN, IMPACT_VARIATION_MAX)
+        * target.impact_variation
 
     local velocity_y = math.clamp(
         math.max(minimum_velocity, rebound_velocity),
         math.sqrt(2 * gravity * MIN_BOUNCE_HEIGHT),
         math.sqrt(2 * gravity * (ball.max_bounce_height or 20))
     )
-    local flight_time = ballistic_flight_time(
+    local flight_time = self:ballistic_flight_time(
         dy,
         velocity_y,
         gravity
@@ -234,7 +184,7 @@ local function launch_to_target(ball, target, obstacle_radius)
     end
 end
 
-local function begin_local_bounce(ball, state, collision, target, kind)
+function System:begin_local_bounce(ball, state, collision, target, kind)
     state.pending_target = target
     state.target = nil
     state.maneuver_position = collision:get_position()
@@ -242,24 +192,16 @@ local function begin_local_bounce(ball, state, collision, target, kind)
     local velocity_y
 
     if kind == "stay" then
-        velocity_y = random_between(
-            ball,
-            STAY_BOUNCE_VELOCITY_MIN,
-            STAY_BOUNCE_VELOCITY_MAX
-        ) * (ball.stay_bounce_scale or 1)
+        velocity_y = target.stay_velocity
     else
-        velocity_y = random_between(
-            ball,
-            WEAK_BOUNCE_VELOCITY_MIN,
-            WEAK_BOUNCE_VELOCITY_MAX
-        ) * (ball.weak_bounce_scale or 1)
+        velocity_y = target.weak_velocity
     end
 
     ball.velocity = vmath.vector3(0, velocity_y, 0)
 end
 
-local function continue_route(ball, state, collision)
-    local target = next_route_target(ball)
+function System:continue_route(ball, state, collision)
+    local target = self:next_route_target(ball)
 
     if not target then
         state.route_finished = true
@@ -270,7 +212,7 @@ local function continue_route(ball, state, collision)
         and (target.bounce_type == "bounce"
             or target.bounce_type == "stay")
     then
-        begin_local_bounce(
+        self:begin_local_bounce(
             ball,
             state,
             collision,
@@ -279,11 +221,11 @@ local function continue_route(ball, state, collision)
         )
     else
         state.target = target
-        launch_to_target(ball, target, collision.radius)
+        self:launch_to_target(ball, target, collision.radius)
     end
 end
 
-local function finish_local_bounce(ball, state, collision)
+function System:finish_local_bounce(ball, state, collision)
     local target = state.pending_target
 
     state.pending_target = nil
@@ -291,11 +233,11 @@ local function finish_local_bounce(ball, state, collision)
     state.target = target
 
     if target then
-        launch_to_target(ball, target, collision.radius)
+        self:launch_to_target(ball, target, collision.radius)
     end
 end
 
-local function bounce_from_unexpected_obstacle(
+function System:bounce_from_unexpected_obstacle(
     ball,
     state,
     collision,
@@ -305,7 +247,7 @@ local function bounce_from_unexpected_obstacle(
     local target = state.target
 
     if target then
-        launch_to_target(ball, target, collision.radius)
+        self:launch_to_target(ball, target, collision.radius)
         return
     end
 
@@ -323,35 +265,35 @@ local function bounce_from_unexpected_obstacle(
     end
 end
 
-local function handle_collision(ball, state, collision)
+function System:respond_to_collision(ball, state, collision)
     local obstacle_position = collision:get_position()
-    local normal_x, normal_y = resolve_overlap(ball, collision)
+    local normal_x, normal_y = self:resolve_overlap(ball, collision)
 
-    register_hit(collision)
+    self:register_hit(collision)
 
     if not state.route_started then
         state.route_started = true
-        continue_route(ball, state, collision)
+        self:continue_route(ball, state, collision)
         return
     end
 
     if state.maneuver_position
-        and positions_match(obstacle_position, state.maneuver_position)
+        and self:positions_match(obstacle_position, state.maneuver_position)
     then
-        finish_local_bounce(ball, state, collision)
+        self:finish_local_bounce(ball, state, collision)
         return
     end
 
     if state.target
         and not state.target.is_basket
-        and positions_match(obstacle_position, state.target.position)
+        and self:positions_match(obstacle_position, state.target.position)
     then
         state.target = nil
-        continue_route(ball, state, collision)
+        self:continue_route(ball, state, collision)
         return
     end
 
-    bounce_from_unexpected_obstacle(
+    self:bounce_from_unexpected_obstacle(
         ball,
         state,
         collision,
@@ -360,7 +302,7 @@ local function handle_collision(ball, state, collision)
     )
 end
 
-local function update_weak_correction(ball, state, dt)
+function System:update_weak_correction(ball, state, dt)
     local target = state.target
 
     if not target or not target.contact_position then
@@ -410,7 +352,7 @@ local function update_weak_correction(ball, state, dt)
     )
 end
 
-local function update_basket_capture(ball, state)
+function System:update_basket_capture(ball, state)
     local target = state.target
 
     if not target or not target.is_basket then
@@ -428,56 +370,6 @@ local function update_basket_capture(ball, state)
             ball = ball,
             basket_index = target.basket_index,
         })
-    end
-end
-
-function System:initialize()
-    self.ball_states = setmetatable({}, { __mode = "k" })
-end
-
-function System:awake()
-    self.ball_states = setmetatable({}, { __mode = "k" })
-    self.balls = gamecontext.balls
-end
-
-function System:update(dt)
-    for _, ball in ipairs(self.balls) do
-        local state = get_state(self, ball)
-        state.active_collision_seen = false
-        state.processed_this_frame = false
-    end
-
-    for _, ball in ipairs(self.balls) do
-        local state = get_state(self, ball)
-        local collision = ball.hitbox
-
-        if collision and collision:is_collided(ball.collision) then
-            if state.active_collision == collision then
-                state.active_collision_seen = true
-            elseif not state.processed_this_frame
-                and not state.route_finished
-            then
-                handle_collision(ball, state, collision)
-                state.active_collision = collision
-                state.active_collision_seen = true
-                state.processed_this_frame = true
-            end
-        end
-    end
-
-    for _, ball in ipairs(self.balls) do
-        local state = get_state(self, ball)
-
-        if state.active_collision
-            and not state.active_collision_seen
-        then
-            state.active_collision = nil
-        end
-
-        if not state.route_finished then
-            update_weak_correction(ball, state, dt)
-            update_basket_capture(ball, state)
-        end
     end
 end
 

@@ -1,0 +1,4 @@
+---@class SessionLevelState
+---@field hash string
+---@field weights integer[]
+---@field values integer[]
