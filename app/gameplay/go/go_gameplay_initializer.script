@@ -1,0 +1,10 @@
+local gamecontext = require("app.gameplay.gamecontext")
+function init(self)
+    msg.post("/camera#camera", "acquire_camera_focus")
+    msg.post("@render:", "use_camera_projection")
+    msg.post("/core#gameplay_controller", "ready")
+
+    gamecontext.frame =  hash("/frame")
+
+    msg.post("/core#gameplay_controller", "ready")
+end

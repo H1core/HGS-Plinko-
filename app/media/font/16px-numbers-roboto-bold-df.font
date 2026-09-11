@@ -1,0 +1,8 @@
+font: "/druid/fonts/Roboto-Bold.ttf"
+material: "/builtins/fonts/font.material"
+size: 100
+antialias: 0
+outline_alpha: 1.0
+outline_width: 3.0
+output_format: TYPE_DISTANCE_FIELD
+characters: "0123456789%.-x"

@@ -1,0 +1,867 @@
+script: "/app/gameplay/gui/gui_gameplay_initializer.gui_script"
+fonts {
+  name: "100px-roboto-bold"
+  font: "/app/media/font/100px-roboto-bold.font"
+}
+textures {
+  name: "common"
+  texture: "/app/media/atlasses/common.atlas"
+}
+nodes {
+  position {
+    x: 384.0
+    y: 668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "s_anchor"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_S
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 1.0
+  }
+  size {
+    x: 650.0
+    y: 128.0
+  }
+  color {
+    x: 0.96862745
+    y: 0.9098039
+    z: 0.7882353
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "footer_inner"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_S
+  parent: "s_anchor"
+  layer: "bottom"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    x: -202.0
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x1"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "btn_shoot_x1/root"
+  parent: "btn_shoot_x1"
+  overridden_fields: 4
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x1/inner"
+  parent: "btn_shoot_x1/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x1/shadow_text"
+  parent: "btn_shoot_x1/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x1"
+  id: "btn_shoot_x1/shadow_text/text_shadow"
+  parent: "btn_shoot_x1/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x1"
+  id: "btn_shoot_x1/shadow_text/text"
+  parent: "btn_shoot_x1/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x5"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x5/root"
+  parent: "btn_shoot_x5"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_shoot_x5/inner"
+  parent: "btn_shoot_x5/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_shoot_x5/shadow_text"
+  parent: "btn_shoot_x5/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x5"
+  id: "btn_shoot_x5/shadow_text/text_shadow"
+  parent: "btn_shoot_x5/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "x5"
+  id: "btn_shoot_x5/shadow_text/text"
+  parent: "btn_shoot_x5/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 200.0
+    y: 71.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_cheats"
+  parent: "footer_inner"
+  inherit_alpha: true
+  template: "/app/templates/button/btn_inner_text.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_cheats/root"
+  parent: "btn_cheats"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btn_cheats/inner"
+  parent: "btn_cheats/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btn_cheats/shadow_text"
+  parent: "btn_cheats/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "Testing"
+  id: "btn_cheats/shadow_text/text_shadow"
+  parent: "btn_cheats/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "Testing"
+  id: "btn_cheats/shadow_text/text"
+  parent: "btn_cheats/shadow_text"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    y: 668.0
+  }
+  size {
+    x: 768.0
+    y: 1336.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "n_anchor"
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_N
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -50.0
+  }
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count"
+  parent: "n_anchor"
+  inherit_alpha: true
+  template: "/app/scripts/widgets/wdt_ball_count/wdt_balls_count.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "wdt_balls_count/root"
+  parent: "wdt_balls_count"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "wdt_balls_count/shoots_inner"
+  parent: "wdt_balls_count/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count/text_cnt"
+  parent: "wdt_balls_count/shoots_inner"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/text_cnt/text_shadow"
+  parent: "wdt_balls_count/text_cnt"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/text_cnt/text"
+  parent: "wdt_balls_count/text_cnt"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "wdt_balls_count/shoot_cd"
+  parent: "wdt_balls_count/shoots_inner"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "wdt_balls_count/shoot_cd_text"
+  parent: "wdt_balls_count/shoot_cd"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/shoot_cd_text/text_shadow"
+  parent: "wdt_balls_count/shoot_cd_text"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "wdt_balls_count/shoot_cd_text/text"
+  parent: "wdt_balls_count/shoot_cd_text"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel"
+  parent: "root"
+  layer: "top"
+  inherit_alpha: true
+  template: "/app/scripts/widgets/properties_panel/properties_panel.gui"
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/root"
+  parent: "properties_panel"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/header"
+  parent: "properties_panel/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/text_header"
+  parent: "properties_panel/header"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/icon_drag"
+  parent: "properties_panel/header"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/content"
+  parent: "properties_panel/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/scroll_view"
+  parent: "properties_panel/content"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/scroll_content"
+  parent: "properties_panel/scroll_view"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/propeties"
+  parent: "properties_panel/content"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_slider"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/root"
+  parent: "properties_panel/property_slider"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_slider/text_name"
+  parent: "properties_panel/property_slider/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/E_Anchor"
+  parent: "properties_panel/property_slider/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/slider"
+  parent: "properties_panel/property_slider/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/slider_back"
+  parent: "properties_panel/property_slider/slider"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/slider_pin"
+  parent: "properties_panel/property_slider/slider"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/button"
+  parent: "properties_panel/property_slider/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_slider/selected"
+  parent: "properties_panel/property_slider/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_slider/text_value"
+  parent: "properties_panel/property_slider/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_checkbox"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_checkbox/root"
+  parent: "properties_panel/property_checkbox"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_checkbox/text_name"
+  parent: "properties_panel/property_checkbox/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_checkbox/E_Anchor"
+  parent: "properties_panel/property_checkbox/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_checkbox/button"
+  parent: "properties_panel/property_checkbox/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_checkbox/icon"
+  parent: "properties_panel/property_checkbox/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_checkbox/selected"
+  parent: "properties_panel/property_checkbox/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_button"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_button/root"
+  parent: "properties_panel/property_button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_button/text_name"
+  parent: "properties_panel/property_button/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_button/E_Anchor"
+  parent: "properties_panel/property_button/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_button/button"
+  parent: "properties_panel/property_button/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_button/selected"
+  parent: "properties_panel/property_button/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_button/text_button"
+  parent: "properties_panel/property_button/button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_input"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/root"
+  parent: "properties_panel/property_input"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_input/text_name"
+  parent: "properties_panel/property_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/E_Anchor"
+  parent: "properties_panel/property_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_input/rich_input"
+  parent: "properties_panel/property_input/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/rich_input/root"
+  parent: "properties_panel/property_input/rich_input"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/rich_input/button"
+  parent: "properties_panel/property_input/rich_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_input/rich_input/placeholder_text"
+  parent: "properties_panel/property_input/rich_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_input/rich_input/input_text"
+  parent: "properties_panel/property_input/rich_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/rich_input/cursor_node"
+  parent: "properties_panel/property_input/rich_input/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_input/rich_input/cursor_text"
+  parent: "properties_panel/property_input/rich_input/cursor_node"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_input/selected"
+  parent: "properties_panel/property_input/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_text"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_text/root"
+  parent: "properties_panel/property_text"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_text/text_name"
+  parent: "properties_panel/property_text/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_text/text_right"
+  parent: "properties_panel/property_text/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_left_right_selector"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/root"
+  parent: "properties_panel/property_left_right_selector"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_left_right_selector/text_name"
+  parent: "properties_panel/property_left_right_selector/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/E_Anchor"
+  parent: "properties_panel/property_left_right_selector/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/button_left"
+  parent: "properties_panel/property_left_right_selector/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/icon_left"
+  parent: "properties_panel/property_left_right_selector/button_left"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/button_right"
+  parent: "properties_panel/property_left_right_selector/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/icon_right"
+  parent: "properties_panel/property_left_right_selector/button_right"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_left_right_selector/selected"
+  parent: "properties_panel/property_left_right_selector/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_left_right_selector/text_value"
+  parent: "properties_panel/property_left_right_selector/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_vector3"
+  parent: "properties_panel/propeties"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/root"
+  parent: "properties_panel/property_vector3"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/text_name"
+  parent: "properties_panel/property_vector3/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/E_Anchor"
+  parent: "properties_panel/property_vector3/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/field_x"
+  parent: "properties_panel/property_vector3/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/text_x"
+  parent: "properties_panel/property_vector3/field_x"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_vector3/rich_input_x"
+  parent: "properties_panel/property_vector3/field_x"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_x/root"
+  parent: "properties_panel/property_vector3/rich_input_x"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_x/button"
+  parent: "properties_panel/property_vector3/rich_input_x/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_x/placeholder_text"
+  parent: "properties_panel/property_vector3/rich_input_x/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_x/input_text"
+  parent: "properties_panel/property_vector3/rich_input_x/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_x/cursor_node"
+  parent: "properties_panel/property_vector3/rich_input_x/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_x/cursor_text"
+  parent: "properties_panel/property_vector3/rich_input_x/cursor_node"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/selected_x"
+  parent: "properties_panel/property_vector3/field_x"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/field_y"
+  parent: "properties_panel/property_vector3/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/text_y"
+  parent: "properties_panel/property_vector3/field_y"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_vector3/rich_input_y"
+  parent: "properties_panel/property_vector3/field_y"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_y/root"
+  parent: "properties_panel/property_vector3/rich_input_y"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_y/button"
+  parent: "properties_panel/property_vector3/rich_input_y/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_y/placeholder_text"
+  parent: "properties_panel/property_vector3/rich_input_y/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_y/input_text"
+  parent: "properties_panel/property_vector3/rich_input_y/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_y/cursor_node"
+  parent: "properties_panel/property_vector3/rich_input_y/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_y/cursor_text"
+  parent: "properties_panel/property_vector3/rich_input_y/cursor_node"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/selected_y"
+  parent: "properties_panel/property_vector3/field_y"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/field_z"
+  parent: "properties_panel/property_vector3/E_Anchor"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/text_z"
+  parent: "properties_panel/property_vector3/field_z"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "properties_panel/property_vector3/rich_input_z"
+  parent: "properties_panel/property_vector3/field_z"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_z/root"
+  parent: "properties_panel/property_vector3/rich_input_z"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_z/button"
+  parent: "properties_panel/property_vector3/rich_input_z/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_z/placeholder_text"
+  parent: "properties_panel/property_vector3/rich_input_z/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_z/input_text"
+  parent: "properties_panel/property_vector3/rich_input_z/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/rich_input_z/cursor_node"
+  parent: "properties_panel/property_vector3/rich_input_z/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "properties_panel/property_vector3/rich_input_z/cursor_text"
+  parent: "properties_panel/property_vector3/rich_input_z/cursor_node"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "properties_panel/property_vector3/selected_z"
+  parent: "properties_panel/property_vector3/field_z"
+  template_node_child: true
+}
+layers {
+  name: "bottom"
+}
+layers {
+  name: "bottom_text"
+}
+layers {
+  name: "top"
+}
+layers {
+  name: "top_text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

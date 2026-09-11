@@ -1,0 +1,77 @@
+fonts {
+  name: "100px-roboto-bold"
+  font: "/app/media/font/100px-roboto-bold.font"
+}
+textures {
+  name: "common"
+  texture: "/app/media/atlasses/common.atlas"
+}
+nodes {
+  size {
+    x: 200.0
+    y: 84.0
+  }
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "root"
+  layer: "bottom"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 200.0
+    y: 84.0
+  }
+  type: TYPE_BOX
+  texture: "common/S_GreenBTN_Idle_R42"
+  id: "inner"
+  parent: "root"
+  layer: "bottom"
+  inherit_alpha: true
+  slice9 {
+    x: 42.0
+    y: 40.0
+    z: 42.0
+    w: 44.0
+  }
+}
+nodes {
+  position {
+    y: 7.0
+  }
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  type: TYPE_TEMPLATE
+  id: "shadow_text"
+  parent: "root"
+  inherit_alpha: true
+  template: "/app/templates/text/shadow_text.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  id: "shadow_text/text_shadow"
+  parent: "shadow_text"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "shadow_text/text"
+  parent: "shadow_text"
+  template_node_child: true
+}
+layers {
+  name: "bottom"
+}
+layers {
+  name: "bottom_text"
+}
+layers {
+  name: "top"
+}
+layers {
+  name: "top_text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

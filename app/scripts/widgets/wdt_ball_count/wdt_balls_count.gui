@@ -1,0 +1,206 @@
+fonts {
+  name: "100px-roboto-bold"
+  font: "/app/media/font/100px-roboto-bold.font"
+}
+textures {
+  name: "common"
+  texture: "/app/media/atlasses/common.atlas"
+}
+nodes {
+  type: TYPE_BOX
+  texture: "common/empty"
+  id: "root"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -10.0
+  }
+  size {
+    x: 136.0
+    y: 100.0
+  }
+  color {
+    x: 0.88235295
+    y: 0.972549
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "shoots_inner"
+  parent: "root"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    y: 10.333333
+  }
+  type: TYPE_TEMPLATE
+  id: "text_cnt"
+  parent: "shoots_inner"
+  inherit_alpha: true
+  template: "/app/templates/text/shadow_text.gui"
+}
+nodes {
+  position {
+    x: 2.0
+    y: -2.0
+  }
+  scale {
+    x: 0.56
+    y: 0.56
+  }
+  color {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  type: TYPE_TEXT
+  text: "10"
+  id: "text_cnt/text_shadow"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "text_cnt"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  template_node_child: true
+}
+nodes {
+  scale {
+    x: 0.56
+    y: 0.56
+  }
+  type: TYPE_TEXT
+  text: "10"
+  id: "text_cnt/text"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "text_cnt"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  overridden_fields: 16
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 2.0
+    y: -48.0
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  size {
+    x: 220.0
+    y: 90.0
+  }
+  color {
+    x: 0.53333336
+    y: 0.6313726
+    z: 0.99215686
+  }
+  type: TYPE_BOX
+  texture: "common/R45_Footer"
+  id: "shoot_cd"
+  parent: "shoots_inner"
+  inherit_alpha: true
+  slice9 {
+    x: 45.0
+    y: 37.0
+    z: 45.0
+    w: 53.0
+  }
+}
+nodes {
+  position {
+    y: 10.333333
+  }
+  type: TYPE_TEMPLATE
+  id: "shoot_cd_text"
+  parent: "shoot_cd"
+  inherit_alpha: true
+  template: "/app/templates/text/shadow_text.gui"
+}
+nodes {
+  position {
+    x: 2.0
+    y: -2.0
+  }
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  color {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  type: TYPE_TEXT
+  text: "+5 in 0s"
+  id: "shoot_cd_text/text_shadow"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "shoot_cd_text"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  template_node_child: true
+}
+nodes {
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  type: TYPE_TEXT
+  text: "+5 in 0s"
+  id: "shoot_cd_text/text"
+  outline {
+    x: 0.4117647
+    y: 0.47843137
+    z: 0.7058824
+  }
+  parent: "shoot_cd_text"
+  overridden_fields: 1
+  overridden_fields: 3
+  overridden_fields: 5
+  overridden_fields: 8
+  overridden_fields: 15
+  overridden_fields: 16
+  template_node_child: true
+}
+layers {
+  name: "bottom"
+}
+layers {
+  name: "bottom_text"
+}
+layers {
+  name: "top"
+}
+layers {
+  name: "top_text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

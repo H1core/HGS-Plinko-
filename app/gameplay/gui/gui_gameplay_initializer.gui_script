@@ -1,0 +1,203 @@
+local gamecontext = require("app.gameplay.gamecontext")
+local druid = require("druid.druid")
+local wdt_balls_count = require("app.scripts.widgets.wdt_ball_count.wdt_balls_count")
+local service_consumables = require("app.scripts.consumables.service_consumables")
+local property_panel = require("app.scripts.widgets.properties_panel.properties_panel")
+
+local monarch = require("monarch.monarch")
+---@class gameplay.gui_script
+---@field druid druid.instance
+---@field panel druid.widget.properties_panel
+---@package
+---@param self gameplay.gui_script
+function init(self)
+    gamecontext.gui_sc = event_context_manager.get()
+    msg.post("/core#gameplay_controller", "ready")
+    msg.post(msg.url('.'), "acquire_input_focus")
+    self.druid = druid.new(self)
+
+    local ball_consumable = service_consumables.get("balls")
+
+    self.druid:new_widget(wdt_balls_count, "wdt_balls_count") --[[@as widget.wdt_balls_count]]
+
+    self.druid:new_button("btn_shoot_x1/root", function ()
+        if(ball_consumable:consume()) then
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 1
+        end
+    end)
+
+    self.druid:new_button("btn_shoot_x5/root", function ()
+        if(ball_consumable:consume(5)) then
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 5
+        end
+    end)
+
+    local _testing_panel_enabled = false
+    self.druid:new_button("btn_cheats/root", function ()
+        _testing_panel_enabled = not _testing_panel_enabled
+        gui.set_enabled(self.panel.root, _testing_panel_enabled)
+    end)
+
+    build_properties_panel(self)
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param dt number
+function update(self, dt)
+    self.druid:update(dt)
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param message_id hash
+---@param message table
+---@param sender url
+function on_message(self, message_id, message, sender)
+    self.druid:on_message(message_id, message, sender)
+end
+
+---@package
+---@param self gameplay.gui_script
+---@param action_id hash
+---@param action on_input.action
+---@return boolean|nil
+function on_input(self, action_id, action)
+   return self.druid:on_input(action_id, action) 
+end
+
+---@package
+---@param self gameplay.gui_script
+function final(self)
+    self.druid:final()
+end
+---@package
+---@param self gameplay.gui_script
+function build_properties_panel(self)
+    local command_run_gameplay = require("app.gameplay.command_run_gameplay")
+    local command_save_snapshot = require("app.gameplay.systems.session.command_take_snapshot")
+    local command_load_snapshot = require("app.gameplay.systems.session.command_load_snapshot")
+    local provider_level = require("app.gameplay.systems.provider_level")
+    local storage = require("app.scripts.storage")
+    local lvl = provider_level.get()
+
+    local function clear_session()
+        storage.set("session", nil)
+        storage.save()
+    end
+
+    local function execute_in_go_ctx(func)
+        local prev = event_context_manager.get()
+        event_context_manager.set(gamecontext.go_sc)
+        func()
+        event_context_manager.set(prev)
+    end
+
+    local panel = self.druid:new_widget(property_panel, "properties_panel") --[[@as druid.widget.properties_panel]]
+    local ball_consumable = service_consumables.get("balls")
+    self.panel = panel
+
+    self.panel:add_checkbox(function (checkbox)
+        checkbox:set_value(false, true)
+        checkbox:set_text_property("Debugging")
+        checkbox:on_change(function (is_debugging)
+            gamecontext.debugging = is_debugging
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("Add Balls")
+        button:set_text_button("x50")
+        button.button.on_click:subscribe(function ()
+            ball_consumable:add_unsafe(50)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("Stress Test")
+        button:set_text_button("1000BALLS")
+         button.button.on_click:subscribe(function ()
+            gamecontext.requested_shoots = (gamecontext.requested_shoots or 0) + 1000
+        end)
+    end)
+
+    self.panel:add_text(function (text)
+        text:set_text_property("Buckets Section")
+    end)
+
+    local _weight = 1
+    self.panel:add_input(function (input)
+        input:set_text_property("Weight")
+        input:set_text_value("1")
+        input.rich_input:set_allowed_characters("[%d]")
+        input.on_change_value:subscribe(function (val)
+            _weight = tonumber(val)
+        end)
+    end)
+
+    local _value = 1
+    self.panel:add_input(function (input)
+        input:set_text_property("Value")
+        input:set_text_value("1")
+        input.rich_input:set_allowed_characters("[%d]")
+        input.on_change_value:subscribe(function (val)
+            _value = tonumber(val)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Add bucket")
+        button.button.on_click:subscribe(function ()
+            table.insert(lvl.values, _value)
+            table.insert(lvl.weights, _weight)
+            command_run_gameplay.execute()
+        end)
+
+        
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Remove bucket")
+        button.button.on_click:subscribe(function ()
+            if(#lvl.weights > 1) then
+                table.remove(lvl.weights)
+                table.remove(lvl.values)
+                clear_session()
+                command_run_gameplay.execute()
+            end
+        end)
+    end)
+
+
+    self.panel:add_text(function (text)
+        text:set_text_property("Save Section")
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Save")
+        button.button.on_click:subscribe(function ()
+            execute_in_go_ctx(command_save_snapshot.execute)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Load")
+        button.button.on_click:subscribe(function ()
+            execute_in_go_ctx(command_load_snapshot.execute)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Reset")
+        button.button.on_click:subscribe(function ()
+            clear_session()
+            provider_level.set(config.buckets)
+            command_run_gameplay.execute()
+        end)
+    end)
+end

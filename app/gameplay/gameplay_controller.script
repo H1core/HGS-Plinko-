@@ -1,0 +1,103 @@
+local gamepipeline = require("app.gameplay.gamepipeline")
+local gamecontext = require("app.gameplay.gamecontext")
+
+local COUNT_INITIALIZABLE_COMPONENTS = 2
+local MSG_READY = hash('ready')
+---@class gameplay_controller.script
+---@field instance_gamepipeline GamePipeline
+---@field is_inited bool
+---@field readycounter integer
+
+---@package
+---@param self gameplay_controller.script
+function awake(self)
+    gamepipeline.call("awake")
+    gamepipeline.call("awake_gui")
+end
+
+---@package
+---@param self gameplay_controller.script
+function init(self)
+    gamecontext.clear()
+    gamecontext.go_sc = event_context_manager.get()
+    msg.post(".", "acquire_input_focus")
+    self.instance_gamepipeline = gamepipeline.get()
+    self.is_inited = false
+    self.readycounter = 0
+    build_gameplay_systems(self.instance_gamepipeline)
+end
+
+---@package
+---@param self gameplay_controller.script
+---@param dt number
+function update(self, dt)
+    if(not self.is_inited) then return end
+
+    gamepipeline.call("update", dt)
+    gamepipeline.call_gui("update_gui", dt)
+    if(gamecontext.dirty) then
+        gamepipeline.call("on_dirty", dt)
+        gamepipeline.call_gui("on_dirty_gui", dt)
+        gamecontext.dirty = false
+    end
+
+    if(gamecontext.debugging) then
+        gamepipeline.call("debug")
+    end
+end
+
+
+---@package
+---@param self gameplay_controller.script
+---@param message_id hash
+---@param message table
+---@param sender url
+function on_message(self, message_id, message, sender)
+    if(not self.is_inited) then
+        if(message_id == MSG_READY) then
+            self.readycounter = self.readycounter + 1
+        end
+
+        if(self.readycounter == COUNT_INITIALIZABLE_COMPONENTS) then
+            self.is_inited = true
+            self.instance_gamepipeline:unlock()
+            awake(self)
+        end
+        return
+    end
+end
+
+---@package
+---@param self gameplay_controller.script
+---@param action_id hash
+---@param action on_input.action
+---@return boolean|nil
+function on_input(self, action_id, action)
+    if(not self.is_inited) then return end
+    gamepipeline.call("on_input", action_id, action)
+end
+
+---@package
+---@param self gameplay_controller.script
+function final(self)
+    gamepipeline.call("final")
+    self.instance_gamepipeline:clear()
+end
+
+---@param pipeline GamePipeline
+function build_gameplay_systems(pipeline)
+    pipeline:add(require("app.gameplay.systems.map.system_build_map")) 
+    pipeline:add(require("app.gameplay.systems.system_match_game_frame"))
+    pipeline:add(require("app.gameplay.systems.balls.system_shoot_ball_on_request"))
+
+    pipeline:add(require("app.gameplay.systems.hit.system_play_effects_on_hit"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_gravity"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_collect_clossest_hitbox"))
+    pipeline:add(require("app.gameplay.systems.physics.system_ball_pathing"))
+    pipeline:add(require("app.gameplay.systems.balls.system_ball_reach_busket"))
+
+    pipeline:add(require("app.gameplay.systems.system_debug"))
+
+    pipeline:add(require("app.gameplay.systems.session.system_session_snapshot"))
+
+end
