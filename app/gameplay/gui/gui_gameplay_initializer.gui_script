@@ -3,7 +3,6 @@ local druid = require("druid.druid")
 local wdt_balls_count = require("app.scripts.widgets.wdt_ball_count.wdt_balls_count")
 local service_consumables = require("app.scripts.consumables.service_consumables")
 local property_panel = require("app.scripts.widgets.properties_panel.properties_panel")
-local command_run_gameplay = require("app.gameplay.features.command_run_gameplay")
 
 local monarch = require("monarch.monarch")
 ---@class gameplay.gui_script
@@ -75,6 +74,25 @@ end
 ---@package
 ---@param self gameplay.gui_script
 function build_properties_panel(self)
+    local command_run_gameplay = require("app.gameplay.command_run_gameplay")
+    local command_save_snapshot = require("app.gameplay.systems.session.command_take_snapshot")
+    local command_load_snapshot = require("app.gameplay.systems.session.command_load_snapshot")
+    local provider_level = require("app.gameplay.systems.provider_level")
+    local storage = require("app.scripts.storage")
+    local lvl = provider_level.get()
+
+    local function clear_session()
+        storage.set("session", nil)
+        storage.save()
+    end
+
+    local function execute_in_go_ctx(func)
+        local prev = event_context_manager.get()
+        event_context_manager.set(gamecontext.go_sc)
+        func()
+        event_context_manager.set(prev)
+    end
+
     local panel = self.druid:new_widget(property_panel, "properties_panel") --[[@as druid.widget.properties_panel]]
     local ball_consumable = service_consumables.get("balls")
     self.panel = panel
@@ -131,8 +149,8 @@ function build_properties_panel(self)
         button:set_text_property("")
         button:set_text_button("Add bucket")
         button.button.on_click:subscribe(function ()
-            table.insert(config.buckets.values, _value)
-            table.insert(config.buckets.weights, _weight)
+            table.insert(lvl.values, _value)
+            table.insert(lvl.weights, _weight)
             command_run_gameplay.execute()
         end)
 
@@ -143,12 +161,43 @@ function build_properties_panel(self)
         button:set_text_property("")
         button:set_text_button("Remove bucket")
         button.button.on_click:subscribe(function ()
-            if(#config.buckets.weights > 1) then
-                table.remove(config.buckets.weights)
-                table.remove(config.buckets.values)
+            if(#lvl.weights > 1) then
+                table.remove(lvl.weights)
+                table.remove(lvl.values)
+                clear_session()
                 command_run_gameplay.execute()
             end
         end)
     end)
 
+
+    self.panel:add_text(function (text)
+        text:set_text_property("Save Section")
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Save")
+        button.button.on_click:subscribe(function ()
+            execute_in_go_ctx(command_save_snapshot.execute)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Load")
+        button.button.on_click:subscribe(function ()
+            execute_in_go_ctx(command_load_snapshot.execute)
+        end)
+    end)
+
+    self.panel:add_button(function (button)
+        button:set_text_property("")
+        button:set_text_button("Reset")
+        button.button.on_click:subscribe(function ()
+            clear_session()
+            provider_level.set(config.buckets)
+            command_run_gameplay.execute()
+        end)
+    end)
 end

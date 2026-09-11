@@ -294,6 +294,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "properties_panel"
   parent: "root"
+  layer: "top"
   inherit_alpha: true
   template: "/app/scripts/widgets/properties_panel/properties_panel.gui"
   enabled: false
